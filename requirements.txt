@@ -5,3 +5,5 @@ torchvision==0.20.1+cu121
 transformers @ git+https://github.com/huggingface/transformers@33eef992503689ba1af98090e26d3e98865b2a9b
 bitsandbytes
 accelerate
+requests
+gdown

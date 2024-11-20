@@ -19,7 +19,7 @@ A Python package for sentence splitting using a pre-trained transformer model.
 Install the package via pip:
 
 ```bash
-pip install sentence_splitter
+pip install iges-sentence-splitter
 ```
 
 ## Requirements
@@ -35,7 +35,7 @@ pip install sentence_splitter
 ### Basic Example
 
 ```python
-from sentence_splitter import SentenceSplitter
+from sentence_splitter.splitter import SentenceSplitter
 
 # Initialize the splitter
 splitter = SentenceSplitter()
@@ -44,7 +44,7 @@ splitter = SentenceSplitter()
 text = "This is a test. Here is another sentence. And yet another one!"
 
 # Get sentences
-sentences = splitter.predict(text)
+sentences = splitter.split(text)
 
 print(sentences)
 ```
@@ -57,10 +57,10 @@ print(sentences)
 
 ### Processing Long Texts
 
-The `predict` method can handle long texts by splitting them into chunks. You can adjust the parameters as needed:
+The `split` method can handle long texts by splitting them into chunks. You can adjust the parameters as needed:
 
 ```python
-sentences = splitter.predict(
+sentences = splitter.split(
     text,
     max_seq_len=512,   # Maximum sequence length for each chunk
     stride=100,        # Overlap between chunks to preserve context
@@ -77,15 +77,15 @@ A class for splitting text into sentences using a pre-trained transformer model.
 #### Initialization
 
 ```python
-splitter = SentenceSplitter(device=None)
+splitter = SentenceSplitter(device=None, efficient_mode=False)
 ```
 
 - **Parameters**:
   - `device` (_str_, optional): The device to run the model on (`'cuda'` or `'cpu'`). Defaults to `'cuda'` if available, otherwise `'cpu'`.
-
+  - `efficient_mode` (_bool_, optional): Whether to run the model in 8-bit precision for faster computing
 #### Methods
 
-- `predict(text, max_seq_len=512, stride=100, batch_size=4)`
+- `split(text, max_seq_len=512, stride=100, batch_size=4)`
 
   Splits the input text into sentences.
 
@@ -115,7 +115,7 @@ Despite the rain, the match continued. Players were determined; fans were cheeri
 "Unbelievable!" shouted the commentator. It's a night to remember.
 """
 
-sentences = splitter.predict(text)
+sentences = splitter.split(text)
 
 for i, sentence in enumerate(sentences, 1):
     print(f"Sentence {i}: {sentence}")
