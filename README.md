@@ -4,12 +4,12 @@ A Python package for sentence splitting using a pre-trained transformer model.
 
 ## Description
 
-**Sentence Splitter** is a Python package that provides accurate sentence segmentation using a transformer-based token classification model. The model is bundled with the package, eliminating the need for additional downloads or configurations. It's designed to handle long texts efficiently and supports GPU acceleration if available.
+**Sentence Splitter** is a Python package that provides accurate sentence segmentation using a transformer-based token classification model. The model is automatically downloaded from Hugging Face Hub on first use and cached locally for future use. It's designed to handle long texts efficiently and supports GPU acceleration if available.
 
 ## Features
 
 - **Transformer-Based Model**: Leverages a pre-trained transformer model for high-accuracy sentence splitting.
-- **Bundled Model**: The model and tokenizer are included with the package—no extra downloads required.
+- **Automatic Model Download**: The model is automatically downloaded from Hugging Face Hub on first use and cached locally.
 - **Easy to Use**: Simple API for quick integration into your projects.
 - **Handles Long Texts**: Efficiently processes long texts by splitting them into manageable chunks.
 - **GPU Acceleration**: Automatically utilizes CUDA if available for faster processing.
@@ -29,6 +29,10 @@ pip install iges-sentence-splitter
 - `transformers`
 
 > **Note**: These dependencies will be installed automatically when you install the package via pip.
+
+## First Use
+
+On first use, the model (~1GB) will be automatically downloaded from Hugging Face Hub and cached locally in `~/.cache/huggingface/`. Subsequent uses will load the model from cache instantly.
 
 ## Usage
 

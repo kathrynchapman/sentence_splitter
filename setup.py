@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='iges-sentence-splitter',
-    version='0.1.7',
+    name='iges_sentence_splitter',
+    version='0.2.1',
     description='A package for sentence splitting using a pre-trained transformer model.',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
@@ -10,10 +10,6 @@ setup(
     author_email='kathryn.chapman@iges.com',
     # url='https://github.com/yourusername/sentence_splitter',
     packages=find_packages(),
-    package_data={
-        'sentence_splitter': ['model/*'],  # Include model files
-    },
-    include_package_data=True,
     install_requires=[
         'torch',
         'transformers',

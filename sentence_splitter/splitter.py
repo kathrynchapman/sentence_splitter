@@ -1,72 +1,30 @@
 from transformers import AutoTokenizer, AutoModelForTokenClassification, BitsAndBytesConfig
-import os, sys
 import torch
-import subprocess
-
-def ensure_package(package_name):
-    try:
-        __import__(package_name)
-    except ImportError:
-        print(f"{package_name} is not installed. Installing now...")
-        subprocess.check_call([sys.executable, "-m", "pip", "install", package_name])
-
-
-# Example usage:
-ensure_package("gdown")
-import gdown
-import zipfile
 
 class SentenceSplitter:
     def __init__(self, device=None, efficient_mode=False):
         """
-        Initialize the SentenceSplitter with the bundled model and tokenizer.
+        Initialize the SentenceSplitter with the model from Hugging Face Hub.
+
+        The model will be automatically downloaded and cached on first use.
         """
         self.device = device if device else ('cuda' if torch.cuda.is_available() else 'cpu')
-        # Path to the bundled model
-        self.model_dir = os.path.join(os.path.dirname(__file__), "model")
 
-        # Check and download model if necessary
-        if not self._is_model_downloaded():
-            print("Model not found. Downloading...")
-            self._download_model()
+        # Hugging Face Hub model name
+        self.model_name = "kathryn-chapman/iges-sentence-splitter"
 
-        self.tokenizer = AutoTokenizer.from_pretrained(self.model_dir)
+        print(f"Loading model from Hugging Face Hub: {self.model_name}")
+
+        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
         if efficient_mode:
             quantization_config = BitsAndBytesConfig(load_in_8bit=True)
             self.model = AutoModelForTokenClassification.from_pretrained(
-                self.model_dir,
+                self.model_name,
                 quantization_config=quantization_config
             )
         else:
-            self.model = AutoModelForTokenClassification.from_pretrained(self.model_dir).to(self.device)
+            self.model = AutoModelForTokenClassification.from_pretrained(self.model_name).to(self.device)
         self.labels = ['B', 'E', 'I']
-
-    def _is_model_downloaded(self):
-        """
-        Check if the model files exist in the model directory.
-        """
-        return os.path.exists(self.model_dir)
-
-    def _download_model(self):
-        """
-        Download the model files from Google Drive if they are not already present.
-        """
-        os.makedirs(self.model_dir, exist_ok=True)
-
-        # Google Drive File IDs
-        file_id = "10Q463A5EbTxVcZdHeIFYmOTw-QA4aqfA"
-
-        print(f"Downloading model.zip...")
-        print(self.model_dir)
-
-        url = f'https://drive.google.com/file/d/{file_id}/view?usp=sharing'
-        gdown.download(url, self.model_dir+'.zip', quiet=False, fuzzy=True)
-
-        with zipfile.ZipFile(self.model_dir+'.zip', 'r') as zip_ref:
-            zip_ref.extractall(os.path.dirname(__file__))
-
-        os.remove(self.model_dir+'.zip')
-        print("Model downloaded successfully.")
 
     def reconstruct_labels(self, tokens, labels):
         reconstructed_words = []
